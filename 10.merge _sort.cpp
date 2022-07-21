@@ -1,102 +1,181 @@
-#include<iostream>
+# include <iostream>
 using namespace std;
 
-
-void merge(int A[], int r,int lba, int B[], int s, int lbb, int C[], int lbc){
-
-    int na = lba, nb = lbb, ptr = lbc, uba = lba+r-1, ubb = lbb+s-1;
-    while(na <= uba && nb <= ubb){
-        if(A[na]<B[nb]){
-            C[ptr] = A[na];
-            na = na+1;
-            ptr = ptr + 1;
-        }
-        else{
-            C[ptr] = B[nb];
-            nb = nb + 1;
-            ptr = ptr + 1;
-        }
-    }
-
-    if(na > uba){
-        for(int i=0; i<s-nb; i++)
-            C[ptr+i] = B[nb+i];
-    }
-    else{
-        for(int i=0; i<uba - na; i++)
-            C[ptr+i] = A[nb+i];
-    }
-}
-
-int merge_pass(int A[], int n, int l, int B[])
+void MERGING(float *A,int R,int LBA,float* B,int S,int LBB,float *C,int LBC)
 {
-	
-	int q = n/(2*l);
-	int s = 2*l*q;
-	int r = n-s;
+    int NA=LBA,NB=LBB,PTR=LBC;
+    int UBA=LBA+R-1,UBB=LBB+S-1;
 
-    cout<<"\n3";
-	
-	for(int i=0; i<q; i++){
-	
-		int lb = 1+(2*i-2)*l;
-		merge(A,l,lb,A,l,lb+1,B,lb);uj
-	}
-	
-    cout<<"\n4";
-	if(r<=l)
-	{
-		for(int j=1; j<r; j++)
-			B[s+j] = A[s+j];
-	}
-	else
-		merge(A,l,(s+1),A,(r-l),(l+s+1),B,(s+1));	
-}
-
-void merge_sort(int A[], int n, int B[]){
-    
-    int l = 1;
-    cout<<"\n2";
-    while(l<n){
-        merge_pass(A,n,l,B);
-        merge_pass(B,n,2*l,A);
-        l = 4*l;
-    }
-    cout<<"\nhello"; 
-
-    for(int i=0; i<14; i++){
-            cout<<B[i]<<" ";
+    while(NA<=UBA && NB<=UBB)
+    {
+        if(A[NA]<B[NB])
+        {
+            C[PTR]=A[NA];
+            NA=NA+1;
+            PTR=PTR+1;
         }
+        else
+        {
+            C[PTR]=B[NB];
+            NB=NB+1;
+            PTR=PTR+1;
+        }
+    }
+
+    if(NA>UBA)
+    {
+        for(int i=0;i<=UBB-NB;i++)
+        {
+            C[PTR+i]=B[NB+i];
+        }
+    }
+    else
+    {
+        for(int i=0;i<=UBA-NA;i++)
+        {
+            C[PTR+i]=A[NA+i];
+        }
+
+    }
 }
 
+void MERGE_PASS(float *A,int N,int L,float *B)
+{
+    int Q=N/(2*L);
+    int S=2*L*Q;
+    int R=N-S;
+    int LB;
 
+     for(int j= 1;j<=Q;j++)
+    {
+        LB=(2*j-2)*L;
+        MERGING(A,L,LB,A,L,LB+L,B,LB);
+    }
 
-int main(){
+    if(R<=L)
+    {
+        for(int k=0;k<R;k++)
+        {
+            B[S+k]=A[S+k];
+        }
+    }
+    else
+    {
+        MERGING(A,L,S,A,R-L,L+S,B,S);
+    }
+}
 
-    int A[14]={66,33,40,22,55,88,60,11,80,20,50,44,77,30};
-    int B[14];
-
-    int n = 14;
-
-    cout<<"\n1";
+void MERGE_SORT(float *A,float *B,int N)
+{
+    int L=1;
     
-    merge_sort(A,n,B);
+    while(L<N)
+    {
+        MERGE_PASS(A,N,L,B);
+        MERGE_PASS(B,N,2*L,A);
+        L=4*L;
+    }
 
-    cout<<"Hi";
-    // if(n%2 == 0){
+}
 
-        cout<<"Array : ";
-        for(int i=0; i<14; i++)
-            cout<<B[i]<<" ";
-    //     }
-    // else{
-        cout<<"Array : ";
-        // for(int i=0; i<14; i++)
-        //    cout<<B[i]<<" ";
+int main()
+{
+    int option,n,choice=1;
+    float A[14]={66,33,40,22,55,88,60,11,80,20,50,44,77,30};
+    float B[14];
+    float *C;
+    float *D;
 
-        //}
-        cout<<"*";
+    cout<<"   ------ MERGE SORT ------"<<endl;
+    cout<<"   "<<endl;
+    while(choice==1)
+    {
+        cout<<"   Choose from the following options to continue"<<endl;
+        cout<<"      1 : Enter a new array"<<endl;
+        cout<<"      2 : Use a default array"<<endl;
+        cout<<"   >>>";
+        cin>>option;
+        
+
+        if(option==1)
+        {
+           cout<<"   Enter the number of elements in the array"<<endl;
+           cout<<"   >>>";
+           cin>>n; 
+
+          C=new float[n];
+          D=new float[n];
+          cout<<"   >>>";
+          for(int i=0;i<n;i++)
+           {
+               cin>>C[i];
+           }
+
+            cout<<"   Array after sorting : "<<endl;
+            cout<<"   >>>";
+            
+            MERGE_SORT(C,D,n);
+            
+            if(float(n/2)==0)
+            {
+                for(int i=0;i<n-1;i++)
+                {
+                    cout<<C[i]<<", ";
+                }
+                cout<<C[n-1]<<endl;
+            }
+            else
+            {
+                for(int i=0;i<n-1;i++)
+                {
+                    cout<<D[i]<<", ";
+                }
+                cout<<D[n-1]<<endl;
+
+            }
+        }
+        
+        else if(option==2)
+        {
+            n=14;
+            cout<<"   Default array : "<<endl;
+            cout<<"   >>>";
+            for(int i=0;i<n-1;i++)
+            {
+                cout<<A[i]<<", ";
+            }
+            cout<<A[n-1]<<endl;
+            cout<<"   Array after sorting : "<<endl;
+            cout<<"   >>>";
+            MERGE_SORT(A,B,n);
+           if(float(n/2)==0)
+            {
+                for(int i=0;i<n-1;i++)
+                {
+                    cout<<A[i]<<", ";
+                }
+                cout<<A[n-1]<<endl;
+            }
+            else
+            {
+                for(int i=0;i<n-1;i++)
+                {
+                    cout<<B[i]<<", ";
+                }
+                cout<<B[n-1]<<endl;
+
+            }
+        }
+        
+        
+        cout<<"   Would you like to continue"<<endl;
+        cout<<"      1 : yes"<<endl;
+        cout<<"      0 : no"<<endl;
+        cout<<"   >>>";
+        cin>>choice;
+        cout<<"   "<<endl;
+
+    }
 
     return 0;
-
 }
